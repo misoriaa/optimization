@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мои работы</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+ul, li { list-style: none; }
+
+:root {
+    --navi: #1a4a6e;
+    --navi-light: #4a9dd4;
+    --bio: #4ff0e0;
+    --spirit: #a78bfa;
+    --text: #eaf6ff;
+    --glass-border: rgba(157, 255, 244, 0.22);
+    --shadow-soft: 0 24px 50px -22px rgba(0,6,14,0.95),
+                   0 12px 30px -18px rgba(26,74,110,0.95),
+                   0 8px 20px -14px rgba(79,240,224,0.5);
+    --shadow-hover: 0 30px 60px -22px rgba(0,6,14,0.95),
+                    0 16px 40px -18px rgba(79,240,224,0.8),
+                    0 10px 26px -14px rgba(167,139,250,0.6);
+    --shadow-open: 0 34px 70px -22px rgba(0,6,14,1),
+                   0 20px 44px -18px rgba(79,240,224,0.95),
+                   0 14px 34px -18px rgba(167,139,250,0.75);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    background: #04101f url("bg.jpg") center/cover no-repeat fixed;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(1200px 800px at 50% 100%, rgba(2,10,22,0.55), transparent 60%),
+        linear-gradient(180deg, rgba(2,10,22,0.35) 0%, rgba(2,10,22,0.15) 40%, rgba(2,10,22,0.5) 100%);
+}
+
+/* ===== НИТИ (без drop-shadow — он убивал INP) ===== */
+.tree-strands {
+    position: fixed;
+    left: 0; top: 0;
+    width: 55vw; height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 40%, rgba(0,0,0,.85) 55%, rgba(0,0,0,.5) 72%, rgba(0,0,0,.15) 88%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 0%, #000 40%, rgba(0,0,0,.85) 55%, rgba(0,0,0,.5) 72%, rgba(0,0,0,.15) 88%, transparent 100%);
+}
+.tree-strands svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.tree-strands .strand {
+    transform-box: fill-box;
+    transform-origin: top center;
+    animation: swayStrand 6s ease-in-out infinite alternate;
+    will-change: transform;
+}
+.tree-strands .strand:nth-child(2n)  { animation-duration: 7.5s; animation-delay: -1s; }
+.tree-strands .strand:nth-child(3n)  { animation-duration: 5.5s; animation-delay: -2s; }
+.tree-strands .strand:nth-child(5n)  { animation-duration: 8s;   animation-delay: -3s; }
+.tree-strands .strand:nth-child(7n)  { animation-duration: 6.5s; animation-delay: -0.5s; }
+.tree-strands .strand:nth-child(11n) { animation-duration: 9s;   animation-delay: -4s; }
+@keyframes swayStrand {
+    0%   { transform: rotate(-1.2deg); opacity: 0.7; }
+    100% { transform: rotate(1.2deg);  opacity: 1; }
+}
+
+#seeds-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* ===== HEADER ===== */
+.header {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    padding: 100px 20px 24px;
+}
+.header h1 {
+    font-size: clamp(32px, 6.5vw, 60px);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #f0fbff;
+    text-shadow:
+        0 1px 0 rgba(255,255,255,0.2),
+        0 0 30px rgba(79,240,224,0.85),
+        0 0 70px rgba(167,139,250,0.6),
+        0 22px 60px rgba(0,0,0,0.9);
+    animation: pulseGlow 4.5s ease-in-out infinite alternate;
+}
+@keyframes pulseGlow {
+    0%   { text-shadow: 0 1px 0 rgba(255,255,255,.2), 0 0 30px rgba(79,240,224,.75), 0 0 70px rgba(167,139,250,.5), 0 22px 60px rgba(0,0,0,.9); }
+    100% { text-shadow: 0 1px 0 rgba(255,255,255,.3), 0 0 50px rgba(79,240,224,1),   0 0 110px rgba(167,139,250,.85), 0 22px 60px rgba(0,0,0,.9); }
+}
+.header h1::after {
+    content: "";
+    display: block;
+    width: 180px; height: 4px;
+    margin: 26px auto 0;
+    border-radius: 4px;
+    background: linear-gradient(90deg, transparent 0%, var(--navi-light) 15%, var(--bio) 45%, var(--spirit) 75%, transparent 100%);
+    box-shadow: 0 0 30px rgba(79,240,224,1), 0 0 70px rgba(167,139,250,.8), 0 0 120px rgba(79,240,224,.5);
+    animation: shimmer 6s ease-in-out infinite alternate;
+}
+@keyframes shimmer {
+    0%   { filter: brightness(1)   hue-rotate(0deg)  blur(.3px); }
+    100% { filter: brightness(1.4) hue-rotate(15deg) blur(.6px); }
+}
+
+/* ===== БЛОК (убран backdrop-filter: blur(60px) — главный убийца INP) ===== */
+.block {
+    position: relative;
+    z-index: 4;
+    max-width: 840px;
+    margin: 40px auto 110px;
+    padding: 50px 44px 56px;
+    border-radius: 40px;
+    background:
+        linear-gradient(180deg, rgba(157,255,244,.14), rgba(26,74,110,.10) 50%, rgba(167,139,250,.12)),
+        rgba(4, 16, 31, 0.55);
+    box-shadow:
+        0 80px 160px -40px rgba(0,6,14,.95),
+        0 40px 80px -50px rgba(26,74,110,1),
+        0 30px 70px -30px rgba(79,240,224,.55),
+        0 20px 50px -30px rgba(167,139,250,.5),
+        inset 0 2px 0 rgba(232,251,255,.5),
+        inset 0 -2px 0 rgba(79,240,224,.15),
+        inset 0 0 120px rgba(79,240,224,.07);
+}
+.block::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(157,255,244,1) 0%, rgba(74,157,212,.9) 25%, rgba(167,139,250,1) 50%, rgba(232,251,255,1) 75%, rgba(79,240,224,1) 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.9;
+}
+.block::after {
+    content: "";
+    position: absolute;
+    top: -1px; left: 6%; right: 6%;
+    height: 90px;
+    border-radius: 50% / 100% 100% 0 0;
+    background: radial-gradient(60% 100% at 50% 0%, rgba(232,251,255,.8), rgba(79,240,224,.25) 40%, transparent 75%);
+    filter: blur(2px);
+    pointer-events: none;
+}
+.block > h1 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 7px;
+    text-transform: uppercase;
+    color: #d8eefb;
+    margin-bottom: 44px;
+    text-shadow: 0 1px 0 rgba(255,255,255,.15), 0 0 24px rgba(79,240,224,.7);
+}
+
+/* ===== КАТЕГОРИИ (убран backdrop-filter, упрощены тени) ===== */
+.category {
+    position: relative;
+    margin-bottom: 14px;
+    border-radius: 24px;
+    background:
+        linear-gradient(180deg, rgba(157,255,244,.12), rgba(26,74,110,.08) 60%, rgba(167,139,250,.10)),
+        rgba(4, 16, 31, 0.42);
+    border: 1px solid var(--glass-border);
+    overflow: hidden;
+    transition: box-shadow .35s ease, background .35s ease, border-color .35s ease;
+    box-shadow: var(--shadow-soft),
+                inset 0 2px 0 rgba(232,251,255,.32),
+                inset 0 -1px 0 rgba(79,240,224,.12),
+                inset 0 0 60px rgba(79,240,224,.03);
+}
+.category:hover {
+    background:
+        linear-gradient(180deg, rgba(157,255,244,.18), rgba(26,74,110,.10) 60%, rgba(167,139,250,.14)),
+        rgba(4, 16, 31, 0.48);
+    border-color: rgba(157,255,244,.5);
+    box-shadow: var(--shadow-hover),
+                inset 0 2px 0 rgba(232,251,255,.45),
+                inset 0 -1px 0 rgba(79,240,224,.2),
+                inset 0 0 80px rgba(79,240,224,.05);
+}
+.category[open] {
+    background:
+        linear-gradient(180deg, rgba(157,255,244,.22), rgba(167,139,250,.12) 60%, rgba(79,240,224,.16)),
+        rgba(4, 16, 31, 0.52);
+    border-color: rgba(157,255,244,.7);
+    box-shadow: var(--shadow-open),
+                0 0 60px -10px rgba(79,240,224,.7),
+                inset 0 2px 0 rgba(232,251,255,.5),
+                inset 0 -1px 0 rgba(79,240,224,.25),
+                inset 0 0 100px rgba(79,240,224,.07);
+}
+.category::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 5%; right: 5%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(232,251,255,1), transparent);
+    pointer-events: none; z-index: 1;
+}
+.category::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 12%; right: 12%;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, rgba(79,240,224,.9), rgba(167,139,250,.7), transparent);
+    pointer-events: none; z-index: 1;
+}
+
+.question {
+    position: relative;
+    z-index: 2;
+    padding: 20px 24px 20px 66px;
+    font-size: 16.5px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    color: #e6f5ff;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    border-radius: 24px;
+    transition: color .25s ease, background .25s ease;
+}
+.question::-webkit-details-marker { display: none; }
+.question::before {
+    content: "";
+    position: absolute;
+    left: 26px; top: 50%;
+    width: 13px; height: 13px;
+    border-right: 2.4px solid var(--bio);
+    border-bottom: 2.4px solid var(--bio);
+    border-radius: 2px;
+    transform: translateY(-65%) rotate(45deg);
+    transition: transform .4s cubic-bezier(.22,1,.36,1), border-color .35s ease;
+    z-index: 3;
+}
+details[open] > .question::before {
+    transform: translateY(-30%) rotate(225deg);
+    border-color: var(--spirit);
+}
+.question::after {
+    content: "";
+    position: absolute;
+    left: 16px; top: 50%;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background:
+        radial-gradient(130% 130% at 28% 22%, rgba(232,251,255,.65), rgba(79,240,224,.15) 50%, rgba(26,74,110,.2) 75%, transparent 100%),
+        linear-gradient(180deg, rgba(79,240,224,.4), rgba(26,74,110,.25));
+    border: 1px solid rgba(157,255,244,.6);
+    box-shadow:
+        0 4px 16px -3px rgba(0,6,14,.95),
+        inset 0 2px 0 rgba(232,251,255,.85),
+        inset 0 -3px 10px rgba(79,240,224,.6),
+        0 0 22px -2px rgba(79,240,224,.75);
+    transition: box-shadow .35s ease, background .35s ease, border-color .35s ease;
+    z-index: 2;
+}
+details[open] > .question::after {
+    background:
+        radial-gradient(130% 130% at 28% 22%, rgba(232,251,255,.7), rgba(212,197,255,.2) 50%, rgba(26,74,110,.25) 75%, transparent 100%),
+        linear-gradient(180deg, rgba(167,139,250,.5), rgba(26,74,110,.3));
+    border-color: rgba(212,197,255,.75);
+    box-shadow:
+        0 4px 16px -3px rgba(0,6,14,.95),
+        inset 0 2px 0 rgba(232,251,255,.9),
+        inset 0 -3px 12px rgba(167,139,250,.85),
+        0 0 40px -2px rgba(167,139,250,1);
+}
+.question:hover { color: #fff; background: rgba(79,240,224,.06); }
+
+/* ===== ОТВЕТЫ (убран backdrop-filter) ===== */
+.answer {
+    position: relative;
+    margin: 6px 14px 16px;
+    padding: 20px 22px 22px;
+    border-radius: 20px;
+    background:
+        linear-gradient(180deg, rgba(157,255,244,.15), rgba(26,74,110,.08) 50%, rgba(167,139,250,.12)),
+        rgba(4, 16, 31, 0.48);
+    border: 1px solid rgba(157,255,244,.32);
+    box-shadow:
+        inset 0 2px 0 rgba(232,251,255,.4),
+        inset 0 -1px 0 rgba(79,240,224,.15),
+        0 18px 44px -26px rgba(0,6,14,1),
+        inset 0 0 70px rgba(79,240,224,.05);
+    animation: liquidIn .5s cubic-bezier(.22,1,.36,1);
+    overflow: hidden;
+}
+.answer::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 8%; right: 8%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(232,251,255,1), transparent);
+    pointer-events: none;
+}
+.answer::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 15%; right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(167,139,250,.7), transparent);
+    pointer-events: none;
+}
+@keyframes liquidIn {
+    from { opacity: 0; transform: translateY(-12px) scale(.975); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.answer ul { padding: 0; margin: 0; position: relative; z-index: 1; }
+.answer li { padding: 2px 0; border-bottom: 1px solid rgba(79,240,224,.12); }
+.answer li:last-child { border-bottom: none; }
+
+.answer a {
+    position: relative;
+    display: block;
+    padding: 12px 16px 12px 48px;
+    color: #c8dcee;
+    text-decoration: none;
+    font-size: 14.5px;
+    border-radius: 14px;
+    transition: color .25s ease, background .25s ease, box-shadow .25s ease, transform .25s ease, padding-left .25s ease;
+}
+.answer a::before {
+    content: "";
+    position: absolute;
+    left: 20px; top: 50%;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background: radial-gradient(circle at 32% 28%, #fff, var(--bio) 40%, var(--navi) 100%);
+    box-shadow: 0 0 14px rgba(79,240,224,1), 0 0 30px rgba(79,240,224,.7);
+    transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.answer a:hover {
+    color: #fff;
+    padding-left: 54px;
+    background: linear-gradient(90deg, rgba(26,74,110,.6), rgba(79,240,224,.22));
+    box-shadow: inset 1px 1px 0 rgba(232,251,255,.3), 0 10px 28px -14px rgba(79,240,224,1), 0 0 30px -8px rgba(79,240,224,.8);
+    transform: translateX(3px);
+}
+.answer a:hover::before {
+    transform: translateY(-50%) translateX(5px) scale(1.5);
+    background: radial-gradient(circle at 32% 28%, #fff, var(--spirit) 40%, var(--spirit) 100%);
+    box-shadow: 0 0 24px rgba(167,139,250,1), 0 0 50px rgba(167,139,250,.85);
+}
+
+/* ===== ВЛОЖЕННЫЕ КАТЕГОРИИ ===== */
+.block > details > details {
+    margin: 14px 0 18px 22px;
+    padding-left: 18px;
+    border: none;
+    border-left: 2px solid rgba(167,139,250,.5);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+}
+.block > details > details::before,
+.block > details > details::after { display: none; }
+.block > details > details:hover,
+.block > details > details[open] { border-left-color: var(--spirit); background: transparent; box-shadow: none; }
+.block > details > details > .question {
+    font-size: 14.5px; font-weight: 600;
+    padding: 14px 18px 14px 54px;
+    color: #b0c8dd;
+    border-radius: 18px;
+}
+.block > details > details > .question::before {
+    left: 22px; width: 11px; height: 11px;
+    border-right: 2px solid var(--spirit);
+    border-bottom: 2px solid var(--spirit);
+}
+.block > details > details > .question::after {
+    left: 13px; width: 30px; height: 30px;
+    background:
+        radial-gradient(130% 130% at 28% 22%, rgba(232,251,255,.5), rgba(167,139,250,.15) 50%, rgba(26,74,110,.2) 75%, transparent 100%),
+        linear-gradient(180deg, rgba(167,139,250,.4), rgba(26,74,110,.2));
+    border-color: rgba(212,197,255,.6);
+}
+.block > details > details[open] > .question::before {
+    border-color: var(--bio);
+}
+.block > details > details[open] > .question::after {
+    background:
+        radial-gradient(130% 130% at 28% 22%, rgba(232,251,255,.6), rgba(79,240,224,.15) 50%, rgba(26,74,110,.25) 75%, transparent 100%),
+        linear-gradient(180deg, rgba(79,240,224,.5), rgba(26,74,110,.25));
+    box-shadow:
+        0 4px 16px -3px rgba(0,6,14,.95),
+        inset 0 2px 0 rgba(232,251,255,.9),
+        inset 0 -3px 12px rgba(79,240,224,.8),
+        0 0 30px -2px rgba(79,240,224,.95);
+}
+.block > details > details > .answer {
+    margin: 6px 10px 14px;
+    background:
+        linear-gradient(180deg, rgba(167,139,250,.14), rgba(26,74,110,.08)),
+        rgba(4, 16, 31, 0.42);
+    border-color: rgba(167,139,250,.3);
+}
+.block > details > details > .answer a { font-size: 14px; color: #a2b8cc; }
+.block > details > details > .answer a::before {
+    background: radial-gradient(circle at 32% 28%, #fff, var(--spirit) 40%, var(--spirit) 100%);
+    box-shadow: 0 0 14px rgba(167,139,250,1), 0 0 30px rgba(167,139,250,.7);
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #04101f; }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--navi-light), var(--bio), var(--spirit));
+    border-radius: 10px;
+    border: 2px solid #04101f;
+    box-shadow: inset 0 1px 0 rgba(232,251,255,.5);
+}
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, var(--bio), var(--spirit)); }
+::selection { background: rgba(79,240,224,.5); color: #fff; }
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 900px) {
+    .tree-strands { width: 70vw; }
+}
+@media (max-width: 640px) {
+    .tree-strands { width: 85vw; }
+    .header { padding: 64px 16px 14px; }
+    .block {
+        margin: 26px 12px 60px;
+        padding: 28px 18px 32px;
+        border-radius: 28px;
+    }
+    .block > h1 { font-size: 15px; letter-spacing: 4px; margin-bottom: 28px; }
+    .question { font-size: 15px; padding: 16px 16px 16px 60px; }
+    .question::before { left: 22px; width: 11px; height: 11px; }
+    .question::after  { left: 12px; width: 32px; height: 32px; }
+    .block > details > details { margin-left: 8px; padding-left: 10px; }
+    .block > details > details > .question { padding-left: 48px; }
+    .block > details > details > .question::before { left: 19px; }
+    .block > details > details > .question::after  { left: 11px; }
+    .answer a { font-size: 14px; padding: 11px 12px 11px 42px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    #seeds-canvas { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SVG НИТИ (генерируется JS) ===== -->
+<div class="tree-strands">
+    <svg id="strands-svg" viewBox="0 0 1000 1080" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid slice">
+        <defs>
+            <linearGradient id="fall1" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"  stop-color="#c8b4ff" stop-opacity="0.95"/>
+                <stop offset="25%" stop-color="#e0d4ff" stop-opacity="0.9"/>
+                <stop offset="55%" stop-color="#a8e8ff" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#7dfff0" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="fall2" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"  stop-color="#dcc8ff" stop-opacity="0.95"/>
+                <stop offset="30%" stop-color="#e8dfff" stop-opacity="0.9"/>
+                <stop offset="60%" stop-color="#b0e8ff" stop-opacity="0.65"/>
+                <stop offset="100%" stop-color="#7dfff0" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="fall3" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"  stop-color="#b8a0ff" stop-opacity="0.9"/>
+                <stop offset="40%" stop-color="#d0e8ff" stop-opacity="0.8"/>
+                <stop offset="100%" stop-color="#a8e8ff" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="glowFilter" x="-80%" y="-80%" width="260%" height="260%">
+                <feGaussianBlur stdDeviation="4"/>
+            </filter>
+        </defs>
+    </svg>
+</div>
+
+<!-- Семена Эйвы -->
+<canvas id="seeds-canvas"></canvas>
+
+<div class="header">
+    <h1>Группа 4ИСИП-1023</h1>
+    <h1>Оганисян Маргарита</h1>
+</div>
+
+<div class="block">
+    <h1>Список заданий</h1>
+
+    <!-- ===== ОПТИМИЗАЦИЯ ===== -->
+    <details class="category">
+        <summary class="question">Оптимизация</summary>
+
+        <details class="category">
+            <summary class="question">Лабораторные работы</summary>
+            <ul class="answer">
+                <li><a href="labopt1.pdf" target="_blank">Лабораторная работа 1.</a></li>
+            </ul>
+        </details>
+
+        <details class="category">
+            <summary class="question">Практические работы</summary>
+            <ul class="answer">
+                <li><a href="propt1.pdf" target="_blank">Практическая работа 1</a></li>
+                <li><a href="propt1.pdf" target="_blank">Практическая работа 4</a></li>
+                <li><a href="templates/printerest/index.html" target="_blank">Практическая работа 4. Сайт</a></li>
+            </ul>
+        </details>
+
+        <details class="category">
+            <summary class="question">Конспекты и дз</summary>
+            <ul class="answer">
+                <li><a href="gost.pdf" target="_blank">ГОСТ 19 и 34</a></li>
+                <li><a href="zapros.pdf" target="_blank">Запросы</a></li>
+                <li><a href="viewer.html?file=1.md">Пара 1</a></li>
+                <li><a href="viewer.html?file=lect1.md">Пара 2</a></li>
+                <li><a href="viewer.html?file=lect2.md">Пара 3</a></li>
+            </ul>
+        </details>
+    </details>
+
+    <!-- ===== РАЗРАБОТКА ===== -->
+    <details class="category">
+        <summary class="question">Разработка</summary>
+
+        <details class="category">
+            <summary class="question">Лабораторные работы</summary>
+            <ul class="answer">
+                <li><a href="laba1.pdf">Лабораторная работа 1. Основы js</a></li>
+                <li><a href="laba2.pdf">Лабораторная работа 2. Взаимодействие с DOM</a></li>
+                <li><a href="laba3.pdf">Лабораторная работа 3. Touch-события и анимация в JavaScript</a></li>
+                <li><a href="laba4.pdf">Лабораторная работа 4. Регулярные выражения в JavaScript</a></li>
+                <li><a href="laba5.pdf">Лабораторная работа 5.</a></li>
+            </ul>
+        </details>
+
+        <details class="category">
+            <summary class="question">Практические работы</summary>
+            <ul class="answer">
+                <li><a href="pr1.pdf">Практическая работа 1</a></li>
+                <li><a href="pr2.pdf">Практическая работа 2</a></li>
+                <li><a href="pr3.pdf">Практическая работа 3</a></li>
+                <li><a href="pr4.pdf">Практическая работа 4</a></li>
+                <li><a href="pr2.pdf">Практическая работа 5</a></li>
+                <li><a href="pr6.pdf">Практическая работа 6</a></li>
+                <li><a href="pr7.pdf">Практическая работа 7</a></li>
+                <li><a href="pr8.pdf">Практическая работа 8</a></li>
+                <li><a href="pr9.pdf">Практическая работа 9</a></li>
+                <li><a href="pr10.pdf">Практическая работа 10</a></li>
+            </ul>
+        </details>
+
+        <details class="category">
+            <summary class="question">Практические страницы</summary>
+            <ul class="answer">
+                <li><a href="./templates/exmpl.html">Лабораторная 3 - Примеры</a></li>
+                <li><a href="./templates/pazzle.html">Лабораторная 3 - Пазл</a></li>
+                <li><a href="./templates/example.html">Лабораторная 4 - Примеры</a></li>
+                <li><a href="./templates/validation.html">Лабораторная 4 - Валидация</a></li>
+            </ul>
+        </details>
+
+        <details class="category">
+            <summary class="question">Наработки</summary>
+            <ul class="answer">
+                <li><a href="./templates/ActivBobic/main_page/main.html">Задание 1. Сайт товаров для домашних животных ActivBobic</a></li>
+                <li><a href="./templates/konktable/index3.html">Задание 1.1. Таблица конкурентов</a></li>
+                <li><a href="#">Задание 3</a></li>
+            </ul>
+        </details>
+
+        <details class="category">
+            <summary class="question">Сайты</summary>
+            <ul class="answer">
+                <li><a href="./templates/homeshop/index.html">Сайт 1. Индивидуальный сайт. Магазин товаров для дома.</a></li>
+                <li><a href="#">Сайт 2</a></li>
+                <li><a href="#">Сайт 3</a></li>
+            </ul>
+        </details>
+
+        <details class="category">
+            <summary class="question">Рефераты</summary>
+            <ul class="answer">
+                <li><a href="referat beget.pdf">Реферат 1. Использование beget как хостинг</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+            </ul>
+        </details>
+    </details>
+</div>
+
+<script>
+/* ===== 1. ГЕНЕРАЦИЯ НИТЕЙ SVG ===== */
+(function () {
+    const svg = document.getElementById('strands-svg');
+    if (!svg) return;
+
+    const NS = 'http://www.w3.org/2000/svg';
+    const frag = document.createDocumentFragment();
+
+    const layers = [
+        { opacity: 0.95, start: 20,  step: 20, end: 720, widths: [2.4,2.6,2.2,2.8] },
+        { opacity: 0.6,  start: 30,  step: 40, end: 710, widths: [1.4,1.6] },
+        { opacity: 0.45, start: 740, step: 30, end: 980, widths: [2,1.8,1.6,1.4,1.2] }
+    ];
+
+    layers.forEach(layer => {
+        const g = document.createElementNS(NS, 'g');
+        g.setAttribute('opacity', layer.opacity);
+        let i = 0;
+        for (let x = layer.start; x <= layer.end; x += layer.step) {
+            const w = layer.widths[i % layer.widths.length];
+            const grad = 'fall' + ((i % 3) + 1);
+            const path = document.createElementNS(NS, 'path');
+            path.setAttribute('class', 'strand');
+            path.setAttribute('d', `M ${x} 0 Q ${x-2} 270 ${x+2} 540 Q ${x+4} 810 ${x} 1080`);
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke', `url(#${grad})`);
+            path.setAttribute('stroke-width', w);
+            path.setAttribute('stroke-linecap', 'round');
+            g.appendChild(path);
+            i++;
+        }
+        frag.appendChild(g);
+    });
+
+    const glowG = document.createElementNS(NS, 'g');
+    glowG.setAttribute('filter', 'url(#glowFilter)');
+    glowG.setAttribute('opacity', '0.85');
+    for (let x = 20; x <= 940; x += 40) {
+        const c = document.createElementNS(NS, 'circle');
+        c.setAttribute('cx', x);
+        c.setAttribute('cy', 1080);
+        const r = x < 760 ? 2 + Math.random() * 0.4 : Math.max(0.8, 2 - (x - 760) / 200);
+        c.setAttribute('r', r.toFixed(1));
+        c.setAttribute('fill', ['#e0d4ff', '#a8e8ff', '#c8b4ff'][Math.floor(Math.random() * 3)]);
+        glowG.appendChild(c);
+    }
+    frag.appendChild(glowG);
+
+    svg.appendChild(frag);
+})();
+
+/* ===== 2. СЕМЕНА ЭЙВЫ (оптимизировано: спрайты, throttle 30 FPS, пауза при скрытой вкладке) ===== */
+(function () {
+    const canvas = document.getElementById('seeds-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d', { alpha: true });
+    let W, H, dpr;
+    const seeds = [];
+    const mouse = { x: -9999, y: -9999, active: false };
+    let mouseVX = 0, mouseVY = 0;
+    let running = true;
+    let rafId = null;
+    let lastFrame = 0;
+    const FRAME_INTERVAL = 1000 / 30; // 30 FPS — достаточно для плавности, вдвое дешевле
+
+    /* --- Спрайты (создаются один раз, устраняют createRadialGradient в кадре) --- */
+    function makeGlowSprite(size, stops) {
+        const c = document.createElement('canvas');
+        c.width = c.height = size;
+        const cx = size / 2;
+        const g = c.getContext('2d');
+        const grad = g.createRadialGradient(cx, cx, 0, cx, cx, cx);
+        stops.forEach(([o, col]) => grad.addColorStop(o, col));
+        g.fillStyle = grad;
+        g.fillRect(0, 0, size, size);
+        return c;
+    }
+
+    const spriteHalo = makeGlowSprite(256, [
+        [0,    'rgba(255,255,255,0.95)'],
+        [0.2,  'rgba(220,250,255,0.6)'],
+        [0.5,  'rgba(120,220,255,0.2)'],
+        [1,    'rgba(80,180,255,0)']
+    ]);
+    const spriteCore = makeGlowSprite(128, [
+        [0,    'rgba(255,255,255,1)'],
+        [0.35, 'rgba(230,250,255,0.9)'],
+        [1,    'rgba(160,230,255,0)']
+    ]);
+    const spriteTip = makeGlowSprite(64, [
+        [0, 'rgba(255,255,255,0.85)'],
+        [1, 'rgba(255,255,255,0)']
+    ]);
+    const spriteSpark = makeGlowSprite(64, [
+        [0,   'rgba(255,255,255,1)'],
+        [0.4, 'rgba(200,240,255,0.7)'],
+        [1,   'rgba(120,200,255,0)']
+    ]);
+
+    function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function rand(a, b) { return Math.random() * (b - a) + a; }
+
+    function createSeed(initial) {
+        const scale = rand(0.8, 1.8);
+        return {
+            x: rand(0, W),
+            y: initial ? rand(0, H) : H + 80,
+            scale,
+            baseVx: rand(-0.15, 0.15),
+            baseVy: rand(-0.3, -0.1),
+            vx: 0, vy: 0,
+            t: rand(0, 1000),
+            swayPhase: rand(0, Math.PI * 2),
+            swaySpeed: rand(0.005, 0.011),
+            pulsePhase: rand(0, Math.PI * 2),
+            pulseSpeed: rand(0.015, 0.03),
+            tentacleCount: 8 + Math.floor(rand(0, 6)),
+            tentaclePhase: rand(0, Math.PI * 2),
+            tentacleSpeed: rand(0.012, 0.024),
+            tentacleLenMin: rand(30, 48),
+            tentacleLenMax: rand(55, 95),
+            capCount: 4 + Math.floor(rand(0, 3)),
+            capPhase: rand(0, Math.PI * 2),
+            sparks: [],
+            sparkTimer: rand(20, 70),
+            alpha: rand(0.75, 1)
+        };
+    }
+
+    function spawnSpark(s) {
+        if (s.sparks.length > 8) return;
+        const angle = rand(0, Math.PI * 2);
+        const dist = rand(4, 14) * s.scale;
+        s.sparks.push({
+            x: s.x + Math.cos(angle) * dist,
+            y: s.y + Math.sin(angle) * dist,
+            vx: Math.cos(angle) * rand(0.08, 0.4),
+            vy: Math.sin(angle) * rand(0.08, 0.4) + rand(0, 0.1),
+            life: 1,
+            decay: rand(0.006, 0.014),
+            size: rand(0.7, 1.9) * s.scale
+        });
+    }
+
+    function init() {
+        resize();
+        seeds.length = 0;
+        const count = Math.min(Math.floor((W * H) / 60000), 18);
+        for (let i = 0; i < count; i++) {
+            const s = createSeed(true);
+            s.vx = s.baseVx;
+            s.vy = s.baseVy;
+            seeds.push(s);
+        }
+    }
+
+    function drawSeed(s) {
+        const t = s.t;
+        const cx = s.x + Math.sin(t * s.swaySpeed + s.swayPhase) * 5 * s.scale;
+        const cy = s.y;
+        const pulse = 0.75 + Math.sin(t * s.pulseSpeed + s.pulsePhase) * 0.25;
+        const coreR = 2.6 * s.scale;
+        const glowR = 9 * s.scale;
+
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        ctx.globalAlpha = s.alpha;
+
+        /* Спарки — спрайт вместо градиента */
+        for (let i = s.sparks.length - 1; i >= 0; i--) {
+            const sp = s.sparks[i];
+            sp.x += sp.vx;
+            sp.y += sp.vy;
+            sp.vy += 0.003;
+            sp.life -= sp.decay;
+            if (sp.life <= 0) { s.sparks.splice(i, 1); continue; }
+            const a = sp.life * pulse;
+            const sz = sp.size * 10;
+            ctx.globalAlpha = a * s.alpha;
+            ctx.drawImage(spriteSpark, sp.x - sz/2, sp.y - sz/2, sz, sz);
+        }
+        ctx.globalAlpha = s.alpha;
+
+        /* Гало — спрайт */
+        ctx.globalAlpha = pulse * s.alpha;
+        const haloSize = glowR * 8;
+        ctx.drawImage(spriteHalo, cx - haloSize/2, cy - haloSize/2, haloSize, haloSize);
+        ctx.globalAlpha = s.alpha;
+
+        /* Щупальца */
+        for (let i = 0; i < s.tentacleCount; i++) {
+            const k = i / (s.tentacleCount - 1 || 1);
+            const a0 = Math.PI * 0.1 + k * Math.PI * 0.8;
+            const wave = Math.sin(t * s.tentacleSpeed + s.tentaclePhase + i * 0.5) * 0.22;
+            const angleFinal = a0 + wave;
+            const centerFactor = 1 - Math.abs(k - 0.5) * 2;
+            const len = (s.tentacleLenMin + (s.tentacleLenMax - s.tentacleLenMin) * centerFactor) * s.scale;
+            const segments = 12;
+            const pts = [];
+            for (let j = 0; j <= segments; j++) {
+                const u = j / segments;
+                const bend = Math.sin(t * s.tentacleSpeed + s.tentaclePhase + i * 0.5 + u * 1.8) * 0.4 * u;
+                const ang = angleFinal + bend;
+                const dist = u * len;
+                pts.push({ x: cx + Math.cos(ang) * dist, y: cy + Math.sin(ang) * dist });
+            }
+            ctx.lineCap = 'round';
+            for (let j = 0; j < pts.length - 1; j++) {
+                const p1 = pts[j], p2 = pts[j + 1];
+                const u1 = j / segments;
+                const alpha = (1 - u1 * 0.85) * 0.95 * pulse;
+                const lw = (1.4 - u1 * 1.15) * s.scale;
+                if (lw <= 0.15) continue;
+                ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+                ctx.lineWidth = lw;
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+            }
+            const tip = pts[pts.length - 1];
+            const tipSize = 6 * s.scale;
+            ctx.globalAlpha = pulse * s.alpha;
+            ctx.drawImage(spriteTip, tip.x - tipSize/2, tip.y - tipSize/2, tipSize, tipSize);
+            ctx.globalAlpha = s.alpha;
+            ctx.fillStyle = `rgba(255,255,255,${0.9 * pulse})`;
+            ctx.beginPath();
+            ctx.arc(tip.x, tip.y, 0.9 * s.scale, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        /* Шапочки */
+        for (let i = 0; i < s.capCount; i++) {
+            const k = s.capCount === 1 ? 0.5 : i / (s.capCount - 1);
+            const a0 = -Math.PI * 0.75 + k * Math.PI * 0.5;
+            const wave = Math.sin(t * s.tentacleSpeed * 1.4 + s.capPhase + i * 0.9) * 0.3;
+            const ang = a0 + wave;
+            const l = (10 + (i % 3) * 3) * s.scale;
+            const ex = cx + Math.cos(ang) * l;
+            const ey = cy + Math.sin(ang) * l;
+            ctx.strokeStyle = `rgba(255,255,255,${0.85 * pulse})`;
+            ctx.lineWidth = 0.9 * s.scale;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.quadraticCurveTo(
+                (cx + ex) / 2 + Math.cos(ang + Math.PI / 2) * wave * 4 * s.scale,
+                (cy + ey) / 2 + Math.sin(ang + Math.PI / 2) * wave * 4 * s.scale,
+                ex, ey
+            );
+            ctx.stroke();
+        }
+
+        /* Ядро — спрайт + точка */
+        ctx.globalAlpha = pulse * s.alpha;
+        const coreSize = coreR * 6;
+        ctx.drawImage(spriteCore, cx - coreSize/2, cy - coreSize/2, coreSize, coreSize);
+        ctx.globalAlpha = s.alpha;
+        ctx.fillStyle = `rgba(255,255,255,${pulse})`;
+        ctx.beginPath();
+        ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    function frame(now) {
+        if (!running) return;
+        if (now - lastFrame < FRAME_INTERVAL) {
+            rafId = requestAnimationFrame(frame);
+            return;
+        }
+        lastFrame = now;
+
+        ctx.clearRect(0, 0, W, H);
+        mouseVX *= 0.9;
+        mouseVY *= 0.9;
+
+        for (let i = 0; i < seeds.length; i++) {
+            const s = seeds[i];
+            s.t += 1;
+
+            if (mouse.active) {
+                const dx = s.x - mouse.x;
+                const dy = s.y - mouse.y;
+                const dist2 = dx * dx + dy * dy;
+                const radius = 200;
+                if (dist2 < radius * radius && dist2 > 1) {
+                    const dist = Math.sqrt(dist2);
+                    const nx = dx / dist, ny = dy / dist;
+                    const force = (1 - dist / radius) * 1.6;
+                    s.vx += nx * force;
+                    s.vy += ny * force;
+                    s.vx += mouseVX * (1 - dist / radius) * 0.15;
+                    s.vy += mouseVY * (1 - dist / radius) * 0.15;
+                }
+            }
+
+            s.vx += (s.baseVx - s.vx) * 0.012;
+            s.vy += (s.baseVy - s.vy) * 0.012;
+
+            const maxSpeed = 3.5;
+            const sp2 = s.vx * s.vx + s.vy * s.vy;
+            if (sp2 > maxSpeed * maxSpeed) {
+                const sp = Math.sqrt(sp2);
+                s.vx = (s.vx / sp) * maxSpeed;
+                s.vy = (s.vy / sp) * maxSpeed;
+            }
+
+            s.x += s.vx;
+            s.y += s.vy;
+
+            s.sparkTimer -= 1;
+            if (s.sparkTimer <= 0) {
+                spawnSpark(s);
+                s.sparkTimer = rand(20, 70);
+            }
+
+            drawSeed(s);
+
+            if (s.y < -200 || s.x < -140 || s.x > W + 140) {
+                seeds[i] = createSeed(false);
+                seeds[i].vx = seeds[i].baseVx;
+                seeds[i].vy = seeds[i].baseVy;
+            }
+        }
+        rafId = requestAnimationFrame(frame);
+    }
+
+    window.addEventListener('mousemove', (e) => {
+        const nx = e.clientX, ny = e.clientY;
+        if (mouse.active) {
+            mouseVX = nx - mouse.x;
+            mouseVY = ny - mouse.y;
+            const maxV = 8;
+            const v2 = mouseVX * mouseVX + mouseVY * mouseVY;
+            if (v2 > maxV * maxV) {
+                const v = Math.sqrt(v2);
+                mouseVX = (mouseVX / v) * maxV;
+                mouseVY = (mouseVY / v) * maxV;
+            }
+        }
+        mouse.x = nx; mouse.y = ny;
+        mouse.active = true;
+    }, { passive: true });
+
+    window.addEventListener('mouseleave', () => { mouse.active = false; });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!e.touches.length) return;
+        const t = e.touches[0];
+        const nx = t.clientX, ny = t.clientY;
+        if (mouse.active) {
+            mouseVX = nx - mouse.x;
+            mouseVY = ny - mouse.y;
+        }
+        mouse.x = nx; mouse.y = ny;
+        mouse.active = true;
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => { mouse.active = false; });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            running = false;
+            if (rafId) cancelAnimationFrame(rafId);
+        } else if (!running) {
+            running = true;
+            lastFrame = 0;
+            rafId = requestAnimationFrame(frame);
+        }
+    });
+
+    window.addEventListener('resize', init, { passive: true });
+    init();
+    rafId = requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
